@@ -17,6 +17,8 @@ var upload = multer();
 app.use(bodyParser.json());
 require("dotenv").config();
 const Model = require("./model/model");
+const Model2 = require("./model/modelData.js");
+
 // buat nangkep json raw
 // app.use(express.json())
 
@@ -55,9 +57,29 @@ app.post("/sendData", async (req, res) => {
     name: req.body.name,
     age: req.body.age,
   });
+
   try {
     const dataToSave = await data.save();
     res.status(200).json(dataToSave);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.post("/sendData2", async (req, res) => {
+  console.log({ dataFromFromPostman: req.body });
+
+  try {
+    if (typeof req.body.name == "string" && typeof req.body.age == "number") {
+      const data = new Model2({
+        name: req.body.name,
+        age: req.body.age,
+      });
+      const dataToSave = await data.save();
+      res.status(200).json(dataToSave);
+    } else {
+      res.status(400).json("erorrr harus dalam bentuk number agenya bos");
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
