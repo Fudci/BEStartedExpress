@@ -70,16 +70,18 @@ app.post("/sendData2", async (req, res) => {
   console.log({ dataFromFromPostman: req.body });
 
   try {
-    if (typeof req.body.name == "string" && typeof req.body.age == "number") {
+    // if (typeof req.body.name == "string" && typeof req.body.age == "number") {
       const data = new Model2({
         name: req.body.name,
         age: req.body.age,
+        createdAt:new Date ()
       });
       const dataToSave = await data.save();
       res.status(200).json(dataToSave);
-    } else {
-      res.status(400).json("erorrr harus dalam bentuk number agenya bos");
-    }
+    // } 
+    // else {
+    //   res.status(400).json("erorrr harus dalam bentuk number agenya bos");
+    // }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

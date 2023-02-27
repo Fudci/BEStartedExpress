@@ -8,6 +8,8 @@ const dataSchema = new mongoose.Schema({
     age: {
         required: true,
         type: Number
+    },createdAt:{
+        type:Date
     }
 })
 
