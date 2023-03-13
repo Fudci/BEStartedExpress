@@ -6,7 +6,7 @@ mongoose
   .connect(mongoString)
   .then(() => console.log("mongoDB Connected"))
   .catch((err) => console.log(err));
-  const UserRoute = require('./routes/userRoutes')
+const UserRoute = require('./routes/userRoutes')
 
 const express = require("express");
 const app = express();
