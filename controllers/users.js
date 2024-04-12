@@ -19,7 +19,8 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.saveUser = async (req, res) => {
-  const user = new User(req.body);
+  console.log(req.body, "this req boy");
+  const user = new User(req.body)
   try {
     const inserteduser = await user.save();
     res.status(201).json(inserteduser);
@@ -36,10 +37,10 @@ exports.updateUser = async (req, res) => {
     );
 
     const PayLoad = {
-        status: 200,
-        message: "Update User Berhasil ",
-        update: req.body,
-      };
+      status: 200,
+      message: "Update User Berhasil ",
+      update: req.body,
+    };
     res.status(200).json(PayLoad);
   } catch (error) {
     res.status(400).json({ message: error.message });

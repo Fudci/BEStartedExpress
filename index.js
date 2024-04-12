@@ -1,21 +1,22 @@
 require("dotenv").config();
 const mongoString =
-  "mongodb+srv://Kaula1:Andi2405@cluster0.aunlnzt.mongodb.net/test";
+  process.env.MONGO
 const mongoose = require("mongoose");
 mongoose
   .connect(mongoString)
   .then(() => console.log("mongoDB Connected"))
   .catch((err) => console.log(err));
-const UserRoute = require('./routes/userRoutes')
+const UserRoute = require("./routes/userRoutes");
 
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 const bodyParser = require("body-parser");
 var multer = require("multer");
 var upload = multer();
 app.use(bodyParser.json());
-require("dotenv").config();
+
+console.log(process.env.MONGO);
 
 // buat nangkep json raw
 // app.use(express.json())
