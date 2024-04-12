@@ -1,6 +1,8 @@
 const User = require("../models/users");
 
+
 exports.getUsers = async (req, res) => {
+  console.log(req.body, "this body");
   try {
     const users = await User.find();
     res.json(users);
@@ -19,8 +21,7 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.saveUser = async (req, res) => {
-  console.log(req.body, "this req boy");
-  const user = new User(req.body)
+  const user = new User(req.body);
   try {
     const inserteduser = await user.save();
     res.status(201).json(inserteduser);
@@ -61,3 +62,5 @@ exports.deleteUser = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+
