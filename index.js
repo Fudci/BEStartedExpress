@@ -14,9 +14,9 @@ mongoose
 
 const UserRoute = require("./routes/userRoutes");
 const DocumentRoutes = require("./routes/documentRoutes");
+const AuthRoutes = require("./routes/authRouters");
 
 const bodyParser = require("body-parser");
-
 
 app.use(bodyParser.json());
 
@@ -37,10 +37,10 @@ app.use(
 
 app.use(UserRoute);
 app.use(DocumentRoutes);
+app.use(AuthRoutes);
 
 var multer = require("multer");
 const upload = multer({ dest: "uploads/" });
-
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

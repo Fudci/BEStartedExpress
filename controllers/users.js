@@ -1,6 +1,5 @@
 const User = require("../models/users");
 
-
 exports.getUsers = async (req, res) => {
   console.log(req.body, "this body");
   try {
@@ -12,8 +11,14 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
+  const { name, email } = req.body;
+  console.log(name, email, "this body");
   try {
     const user = await User.findById(req.params.id);
+    const userName = await User.findOne({ name });
+    const userEmail = await User.findOne({ email });
+    console.log(userName, "name", userEmail, "email");
+
     res.json(user);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -62,5 +67,3 @@ exports.deleteUser = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
-
