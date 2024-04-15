@@ -25,7 +25,7 @@ exports.paginationNews = async (req, res, next) => {
       .limit(limit);
 
     // Count total number of news articles
-    const total = await News.countDocuments();
+    const total = await News.countDocuments() / limit;
 
     // Prepare response object
     const response = {
