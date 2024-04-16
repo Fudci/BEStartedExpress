@@ -37,6 +37,7 @@ app.use(express.static("public"));
 app.use(handlingErrorBefore);
 
 
+app.get("/", (req, res) => res.send("Express on Vercel"));
 
 // Mount routes
 app.use(UserRoute);
