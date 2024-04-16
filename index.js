@@ -36,7 +36,6 @@ app.use(express.static("public"));
 // Middleware for error handling before routes
 app.use(handlingErrorBefore);
 
-
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 // Mount routes
@@ -44,7 +43,7 @@ app.use(UserRoute);
 
 app.use(DocumentRoutes);
 app.use(AuthRoutes);
-app.use(NewsRoutes)
+app.use(NewsRoutes);
 
 // Middleware for error handling after routes
 app.use(handlingErrorAfter);
@@ -53,3 +52,4 @@ app.use(handlingErrorAfter);
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+
