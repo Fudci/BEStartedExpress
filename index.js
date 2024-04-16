@@ -4,22 +4,22 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const UserRoute = require("./routes/userRoutes");
-const DocumentRoutes = require("./routes/documentRoutes");
+// const DocumentRoutes = require("./routes/documentRoutes");
 const AuthRoutes = require("./routes/authRouters");
 const NewsRoutes = require("./routes/newsRoutes.js");
 
 const handlingErrorBefore = require("./middleware/handlingErrorBeforeRoute.js");
 const handlingErrorAfter = require("./middleware/handlingErrorAfterRoute.js");
-const authorization = require("./middleware/authorization.js");
 
 // Load environment variables from .env file
 dotenv.config();
 
 // Set up Express app
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 // Connect to MongoDB
+
 const mongoString = process.env.MONGO;
 mongoose
   .connect(mongoString)
@@ -41,7 +41,7 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 // Mount routes
 app.use(UserRoute);
 
-app.use(DocumentRoutes);
+// app.use(DocumentRoutes);
 app.use(AuthRoutes);
 app.use(NewsRoutes);
 
@@ -52,4 +52,3 @@ app.use(handlingErrorAfter);
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
-
