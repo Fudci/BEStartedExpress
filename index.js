@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const UserRoute = require("./routes/userRoutes");
-// const DocumentRoutes = require("./routes/documentRoutes");
+const DocumentRoutes = require("./routes/documentRoutes");
 const AuthRoutes = require("./routes/authRouters");
 const NewsRoutes = require("./routes/newsRoutes.js");
 
@@ -41,7 +41,7 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 // Mount routes
 app.use(UserRoute);
 
-// app.use(DocumentRoutes);
+app.use(DocumentRoutes);
 app.use(AuthRoutes);
 app.use(NewsRoutes);
 
