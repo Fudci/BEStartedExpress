@@ -1,11 +1,10 @@
 const { postDoc, postDocMultiple } = require("../controllers/documents");
-var multer = require("multer");
-const minioMulter = multer({ storage: multer.memoryStorage() });
 
 const express = require("express");
+const multerHelper = require("../util/multerHelp");
 const router = express.Router();
 
-router.post("/doc", minioMulter.single("files"), postDoc);
-router.post("/docmul", minioMulter.array("files", 10), postDocMultiple);
+router.post("/doc", multerHelper.single("files"), postDoc);
+router.post("/docmul", multerHelper.array("files", 10), postDocMultiple);
 
 module.exports = router;

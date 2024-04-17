@@ -1,14 +1,30 @@
 const Document = require("../models/document");
+const imageKit = require("../util/imageKit");
 
 exports.postDoc = async (req, res) => {
-  console.log(JSON.stringify(req.file), JSON.stringify(req.body));
-
-  // upload.single("avatar");
   try {
-    res.status(200).json("ok");
+    // Check if file exists in the request
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    // Upload the file to the image kit
+    const imageUpload = await imageKit.upload({
+      file: req.file.buffer.toString("base64"),
+      fileName: req.file.originalname,
+      folder: "posttest",
+      useUniqueFileName: false,
+    });
+
+    console.log(imageUpload, "Upload successful"); // Log success message
+
+    // Respond with success status
+    res.status(200).json({ message: "File uploaded successfully" });
   } catch (error) {
-    console.log(error, "eror nid");
-    res.status(500).json({ message: error.message });
+    console.error("Error:", error); // Log the error
+
+    // Respond with error status and message
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 

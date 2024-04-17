@@ -1,4 +1,5 @@
 const User = require("../models/users");
+const imageKit = require("../util/imageKit");
 
 exports.getUsers = async (req, res) => {
   try {
@@ -36,15 +37,32 @@ exports.saveUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const updateduser = await User.updateOne(
+    let imageUrl = null;
+    if (req.file) {
+      const imageUpload = await imageKit.upload({
+        file: req.file.buffer.toString("base64"),
+        fileName: req.file.originalname,
+        folder: "posttest",
+        useUniqueFileName: false,
+      });
+      imageUrl = imageUpload.url;
+    }
+    let updateData = { ...req.body };
+    if (imageUrl) {
+      updateData.profilePicture = imageUrl;
+    }
+    const updatedUser = await User.findOneAndUpdate(
       { _id: req.params.id },
-      { $set: req.body }
+      { $set: updateData },
+      { new: true }
     );
-
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
     const PayLoad = {
       status: 200,
-      message: "Update User Berhasil ",
-      update: req.body,
+      message: "Update User Berhasil",
+      update: updatedUser,
     };
     res.status(200).json(PayLoad);
   } catch (error) {

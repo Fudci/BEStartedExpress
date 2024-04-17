@@ -16,6 +16,7 @@ exports.register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      profilePicture: null,
     });
     await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
@@ -87,7 +88,7 @@ exports.verifyOTP = async (req, res) => {
     if (name.includes("@gmail.com")) {
       sendOTP(name, OTP);
     }
-   
+
     console.log(generateOTP());
     const validOTP = await bcrypt.compare(otp, hashOTP);
 
