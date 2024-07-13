@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Play Audio from URL</title>
+    <style>
+      /* CSS for animation */
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slide {
+        0% {
+          transform: translateX(-50%);
+        }
+        100% {
+          transform: translateX(50%);
+        }
+      }
+
+      .love-image {
+        position: absolute;
+        top: 0;
+        width: 100px;
+        height: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: fade 4s infinite alternate;
+      }
+
+      .slide-box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: slide 3s infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+      }
+
+      .slide {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Love image animation -->
+    <iframe src="https://fudci.github.io/audio/penjaga-hati.mp3" type="audio/mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+    <audio autoplay>
+      <source src="https://fudci.github.io/audio/penjaga-hati.mp3" type="audio/mp3">
+  </audio>
+    <img
+      class="love-image"
+      src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2Fab%2Fbb%2F08%2Fabbb081b85931d7f336fd0bfbf54d839.png&f=1&nofb=1&ipt=80d47340a147b6ace1906bcf47070152ab279ecb5e2f9e97923c0036a0429d31&ipo=images"
+      alt="Love Image"
+    />
+
+    <!-- Slide box animation -->
+    <div class="slide-box">
+      <div class="slide">
+        <img src="https://example.com/slide1.jpg" alt="Slide 1" />
+        <p>Slide 1 Text</p>
+      </div>
+      <div class="slide">
+        <img src="https://example.com/slide2.jpg" alt="Slide 2" />
+        <p>Slide 2 Text</p>
+      </div>
+      <!-- Add more slides as needed -->
+    </div>
+
+    <button onclick="playAudio()">Play Audio</button>
+
+    <script>
+      function playAudio() {
+        var audio = new Audio("https://fudci.github.io/audio/penjaga-hati.mp3");
+        audio.play();
+      }
+
+      // JavaScript for slideshow
+      var slides = document.querySelectorAll(".slide");
+      var currentSlide = 0;
+
+      function nextSlide() {
+        slides[currentSlide].style.display = "none";
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].style.display = "block";
+      }
+
+      setInterval(nextSlide, 3000);
+    </script>
+
+    <script>
+      window.onload = function () {
+        playAudio();
+        var context = new AudioContext();
+      };
+    </script>
+  </body>
+</html>
