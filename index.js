@@ -7,6 +7,7 @@ const UserRoute = require("./routes/userRoutes");
 const DocumentRoutes = require("./routes/documentRoutes");
 const AuthRoutes = require("./routes/authRouters");
 const NewsRoutes = require("./routes/newsRoutes.js");
+const ItemsRoutes = require("./routes/Items.js")
 
 const handlingErrorBefore = require("./middleware/handlingErrorBeforeRoute.js");
 const handlingErrorAfter = require("./middleware/handlingErrorAfterRoute.js");
@@ -40,6 +41,8 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 
 // Mount routes
 app.use(UserRoute);
+app.use(ItemsRoutes);
+
 
 app.use(DocumentRoutes);
 app.use(AuthRoutes);
