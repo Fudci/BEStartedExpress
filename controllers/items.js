@@ -1,7 +1,6 @@
 const Item = require('../models/item');
 
-
-exports.postItems  = async (req, res) => {
+exports.postItems = async (req, res) => {
     const item = new Item({
         name: req.body.name,
         description: req.body.description,
@@ -25,25 +24,38 @@ exports.getItems = async (req, res) => {
     }
 }
 
-exports.getItemById = getItem, (req, res) => {
-    res.json(res.item);
+// Get item by ID
+exports.getItemById = async (req, res) => {
+    try {
+        const item = await Item.findById(req.params.id);
+        if (item == null) {
+            return res.status(404).json({ message: 'Cannot find item' });
+        }
+        res.json(item);
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
+    }
 }
 
-exports.updateItems = getItem, async (req, res) => {
-
-    
-    if (req.body.name != null) {
-        res.item.name = req.body.name;
-    }
-    if (req.body.description != null) {
-        res.item.description = req.body.description;
-    }
-    if (req.body.price != null) {
-        res.item.price = req.body.price;
-    }
-
+// Update item
+exports.updateItems = async (req, res) => {
     try {
-        const updatedItem = await res.item.save();
+        let item = await Item.findById(req.params.id);
+        if (item == null) {
+            return res.status(404).json({ message: 'Cannot find item' });
+        }
+
+        if (req.body.name != null) {
+            item.name = req.body.name;
+        }
+        if (req.body.description != null) {
+            item.description = req.body.description;
+        }
+        if (req.body.price != null) {
+            item.price = req.body.price;
+        }
+
+        const updatedItem = await item.save();
         res.json(updatedItem);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -51,28 +63,16 @@ exports.updateItems = getItem, async (req, res) => {
 }
 
 // Delete an item
-exports.deleteItem = getItem, async (req, res) => {
+exports.deleteItem = async (req, res) => {
     try {
-        const deletedItem = await Item.deleteOne({ _id: res.item._id });
-        await deletedItem
+        let item = await Item.findById(req.params.id);
+        if (item == null) {
+            return res.status(404).json({ message: 'Cannot find item' });
+        }
+
+        await item.remove();
         res.json({ message: 'Deleted Item' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 }
-
-async function getItem(req, res, next) {
-    let item;
-    try {
-        item = await Item.findById(req.params.id);
-        if (item == null) {
-            return res.status(404).json({ message: 'Cannot find item' });
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message });
-    }
-
-    res.item = item;
-    next();
-}
-
