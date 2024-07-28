@@ -1,18 +1,34 @@
 const Item = require('../models/item');
+const imageKit = require("../util/imageKit");
+
 
 exports.postItems = async (req, res) => {
-    const item = new Item({
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price
-    });
     try {
+        const imageUpload = await imageKit.upload({
+            file: req.file.buffer.toString("base64"),
+            fileName: req.file.originalname,
+            folder: "posttest",
+            useUniqueFileName: false,
+        });
+
+        const item = new Item({
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            photoProduct: [
+                {
+                    fileName: imageUpload.name,
+                    filePath: imageUpload.url
+                }
+            ]
+        });
+
         const newItem = await item.save();
         res.status(201).json(newItem);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
-}
+};
 
 // Get all items
 exports.getItems = async (req, res) => {
@@ -53,6 +69,21 @@ exports.updateItems = async (req, res) => {
         }
         if (req.body.price != null) {
             item.price = req.body.price;
+        }
+
+        // Handle file upload
+        if (req.file) {
+            const imageUpload = await imageKit.upload({
+                file: req.file.buffer.toString("base64"),
+                fileName: req.file.originalname,
+                folder: "posttest",
+                useUniqueFileName: false,
+            });
+
+            item.photoProduct.push({
+                fileName: imageUpload.name,
+                filePath: imageUpload.url
+            });
         }
 
         const updatedItem = await item.save();

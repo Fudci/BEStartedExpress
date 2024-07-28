@@ -26,10 +26,36 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.saveUser = async (req, res) => {
-  const user = new User(req.body);
+  console.log(req, 'this');
   try {
-    const inserteduser = await user.save();
-    res.status(201).json(inserteduser);
+    const { firstName, lastName, location, phoneNumber, address, email, password } = req.body;
+
+    // Handle image upload
+    const imageUpload = await imageKit.upload({
+      file: req.file.buffer.toString("base64"),
+      fileName: req.file.originalname,
+      folder: "posttest",
+      useUniqueFileName: false,
+    });
+
+    // Create a new user with the image URL
+    const user = new User({
+      firstName,
+      lastName,
+      location,
+      phoneNumber,
+      address,
+      email,
+      password,
+      profilePicture: [{
+        fileName: imageUpload.name,
+        filePath: imageUpload.url,
+      }],
+    });
+
+    // Save the user to the database
+    const insertedUser = await user.save();
+    res.status(201).json(insertedUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -47,24 +73,33 @@ exports.updateUser = async (req, res) => {
       });
       imageUrl = imageUpload.url;
     }
-    let updateData = { ...req.body };
-    if (imageUrl) {
-      updateData.profilePicture = imageUrl;
+
+    let updateData = {};
+    for (let key in req.body) {
+      if (req.body[key]) {
+        updateData[key] = req.body[key];
+      }
     }
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
+
+    if (imageUrl) {
+      updateData.profilePicture = { fileName: req.file.originalname, filePath: imageUrl };
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
       { $set: updateData },
       { new: true }
     );
+
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-    const PayLoad = {
+
+    res.status(200).json({
       status: 200,
-      message: "Update User Berhasil",
+      message: "Update User Successful",
       update: updatedUser,
-    };
-    res.status(200).json(PayLoad);
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
